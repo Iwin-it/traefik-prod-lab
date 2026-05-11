@@ -1,0 +1,27 @@
+# env файл (секреты)
+.env
+.env.dev
+.env.prod
+
+
+# сертификаты 
+configs/certs/
+
+# логи и временные файлы
+*.log
+*.tmp
+
+# Системные файлы
+.DS_Store
+Thrumbs.db
+
+# python
+_pycache_/
+*.pyc
+
+# docker override (локальные изменения)
+docker-compose.override.yml
+
+#grafana data (если добавишь volume позже)
+grafanf-data/
+prometheus-data/ 

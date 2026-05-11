@@ -1,0 +1,17 @@
+tls:
+  certificates:
+    - certFile: /certs/cert.pem
+      keyFile: /certs/key.pem
+
+http:
+  middlewares:
+    secure-headers:
+      headers:
+        contentTypeNosniff: true
+        frameDeny: true
+
+
+    dashboard-auth:
+      basicAuth:
+        users:
+          - "admin:$apr1$sJc3RAet$2regUh.U385cqebSJu5rM/"
