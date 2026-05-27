@@ -1,0 +1,26 @@
+name: Kubernetes Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Show repository files
+      run: ls -la
+
+    - name: Build test
+      run: echo "Build successful"
+
+    - name: Deploy test
+      run: echo "Deploy completed"

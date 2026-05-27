@@ -1,0 +1,74 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: api-deployment
+spec:
+  replicas: 2
+
+  selector:
+    matchLabels:
+      app: api
+
+  template:
+    metadata:
+      labels:
+        app: api
+
+    spec:
+      containers:
+        - name: api
+
+          image: python:3.12-alpine
+
+          env:
+            - name: APP_ENV
+              valueFrom:
+                configMapKeyRef:
+                  name: api-config
+                  key: APP_ENV
+
+            - name: APP_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: api-config
+                  key: APP_NAME
+
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: api-secret
+                  key: DB_PASSWORD
+
+
+          command:
+            - sh
+            - -c
+            - |
+              cat <<'EOF' > /server.py
+              from http.server import BaseHTTPRequestHandler, HTTPServer
+              import json
+              import socket
+
+              class Handler(BaseHTTPRequestHandler):
+                  def do_GET(self):
+                      data = {
+                          "service": "api",
+                          "path": self.path,
+                          "hostname": socket.gethostname()
+                      }
+
+                      body = json.dumps(data).encode()
+
+                      self.send_response(200)
+                      self.send_header("Content-Type", "application/json")
+                      self.end_headers()
+                      self.wfile.write(body)
+
+              HTTPServer(("0.0.0.0", 8000), Handler).serve_forever()
+              EOF
+
+              python /server.py
+
+          ports:
+            - containerPort: 8000
