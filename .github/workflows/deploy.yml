@@ -19,8 +19,5 @@ jobs:
     - name: Show repository files
       run: ls -la
 
-    - name: Build test
-      run: echo "Build successful"
-
-    - name: Deploy test
-      run: echo "Deploy completed"
+    - name: Build Docker image
+      run: docker build -t traefik-prod-lab:test .
