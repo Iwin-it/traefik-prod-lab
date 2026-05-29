@@ -5,6 +5,10 @@ on:
     branches:
       - main
 
+permissions:
+  contents: read
+  package: write
+
 jobs:
 
   build:
@@ -16,8 +20,11 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
 
-    - name: Show repository files
-      run: ls -la
+    - name: Login to GHCR
+      run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
     - name: Build Docker image
-      run: docker build -t traefik-prod-lab:test .
+      run: docker build -t ghcr.io/iwin-it/traefik-prod-lab:${{ github.sha }} .
+
+    - name: Push Docker image
+      run: docker push ghcr.io/iwin-it/traefik-prod-lab:${{ github.sha }}
