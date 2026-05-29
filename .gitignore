@@ -28,3 +28,4 @@ prometheus-data/
 
 # backup-файл
 *.save
+k8s/istio-*/
